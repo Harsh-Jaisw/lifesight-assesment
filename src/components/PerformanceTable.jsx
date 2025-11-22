@@ -11,7 +11,7 @@ import {
   setPageSize,
   setSort,
 } from '../features/performance/performanceSlice';
-
+import CustomSelect from './CustomSelect';
 const formatNumber = value => value.toLocaleString();
 const formatCurrency = value =>
   value.toLocaleString(undefined, {
@@ -27,7 +27,7 @@ const PerformanceTable = React.memo(function PerformanceTable() {
   const sort = useSelector(selectSort);
 
   const [openRegions, setOpenRegions] = useState({}); // { [region]: bool }
-
+  const pageOptions = [{ label: 10, value: 10 },{ label: 25, value: 25 },{ label: 50, value: 50 }]
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / pagination.pageSize)),
     [total, pagination.pageSize]
@@ -49,8 +49,8 @@ const PerformanceTable = React.memo(function PerformanceTable() {
   );
 
   const handlePageSizeChange = useCallback(
-    e => {
-      const newSize = Number(e.target.value);
+    value => {
+      const newSize = Number(value);
       dispatch(setPageSize(newSize));
     },
     [dispatch]
@@ -84,221 +84,83 @@ const PerformanceTable = React.memo(function PerformanceTable() {
         </div>
         <div>
           Rows / page:&nbsp;
-          <select
-            value={pagination.pageSize}
-            onChange={handlePageSizeChange}
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>
+           <CustomSelect
+          options={pageOptions}
+          value={pagination.pageSize}
+          handleChange={handlePageSizeChange}
+          wrapperClassName='filters-row-select'
+        />
         </div>
       </div>
+      <div className="table-wrapper">
+          <table className="perf-table">
+            <thead>
+              <tr>
+                <th onClick={() => handleSort('spend')}>
+                  Region / Channel
+                </th>
 
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          border: '1px solid #ddd',
-          fontSize: '0.9rem',
-        }}
-      >
-        <thead>
-          <tr style={{ backgroundColor: '#f5f5f5' }}>
-            <th
-              style={{ textAlign: 'left', padding: '0.5rem' }}
-            >
-              Region / Channel
-            </th>
-            <th
-              style={{
-                textAlign: 'right',
-                padding: '0.5rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => handleSort('spend')}
-            >
-              Spend{getSortLabel('spend')}
-            </th>
-            <th
-              style={{
-                textAlign: 'right',
-                padding: '0.5rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => handleSort('impressions')}
-            >
-              Impressions{getSortLabel('impressions')}
-            </th>
-            <th
-              style={{
-                textAlign: 'right',
-                padding: '0.5rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => handleSort('clicks')}
-            >
-              Clicks{getSortLabel('clicks')}
-            </th>
-            <th
-              style={{
-                textAlign: 'right',
-                padding: '0.5rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => handleSort('conversions')}
-            >
-              Conversions{getSortLabel('conversions')}
-            </th>
-            <th
-              style={{
-                textAlign: 'right',
-                padding: '0.5rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => handleSort('ctr')}
-            >
-              CTR%{getSortLabel('ctr')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {regions.map(regionGroup => {
-            const isOpen = !!openRegions[regionGroup.region];
-            return (
-              <React.Fragment key={regionGroup.region}>
-                {/* REGION HEADER ROW (accordion) */}
-                <tr
-                  onClick={() => toggleRegion(regionGroup.region)}
-                  style={{
-                    backgroundColor: '#fafafa',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <td
-                    style={{
-                      padding: '0.5rem',
-                      fontWeight: 'bold',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {isOpen ? '▼' : '▶'} {regionGroup.region}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: 'right',
-                      padding: '0.5rem',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {formatCurrency(regionGroup.totals.spend)}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: 'right',
-                      padding: '0.5rem',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {formatNumber(regionGroup.totals.impressions)}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: 'right',
-                      padding: '0.5rem',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {formatNumber(regionGroup.totals.clicks)}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: 'right',
-                      padding: '0.5rem',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {formatNumber(regionGroup.totals.conversions)}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: 'right',
-                      padding: '0.5rem',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
-                    {regionGroup.totals.ctr.toFixed(2)}%
-                  </td>
-                </tr>
+                <th onClick={() => handleSort('spend')}>
+                  Spend{getSortLabel('spend')}
+                </th>
 
-                {/* CHANNEL ROWS */}
-                {isOpen &&
-                  regionGroup.items.map(item => (
-                    <tr key={item.id}>
-                      <td
-                        style={{
-                          padding: '0.5rem 0.5rem 0.5rem 2rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {item.channel}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: 'right',
-                          padding: '0.5rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {formatCurrency(item.spend)}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: 'right',
-                          padding: '0.5rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {formatNumber(item.impressions)}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: 'right',
-                          padding: '0.5rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {formatNumber(item.clicks)}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: 'right',
-                          padding: '0.5rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {formatNumber(item.conversions)}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: 'right',
-                          padding: '0.5rem',
-                          borderTop: '1px solid #f0f0f0',
-                        }}
-                      >
-                        {((item.clicks / item.impressions) * 100 || 0).toFixed(
-                          2
-                        )}
-                        %
-                      </td>
-                    </tr>
-                  ))}
-              </React.Fragment>
-            );
-          })}
-        </tbody>
-      </table>
+                <th onClick={() => handleSort('impressions')}>
+                  Impressions{getSortLabel('impressions')}
+                </th>
 
+                <th onClick={() => handleSort('clicks')}>
+                  Clicks{getSortLabel('clicks')}
+                </th>
+
+                <th onClick={() => handleSort('conversions')}>
+                  Conversions{getSortLabel('conversions')}
+                </th>
+
+                <th onClick={() => handleSort('ctr')}>
+                  CTR%{getSortLabel('ctr')}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+                {regions.map(regionGroup => {
+                  const isOpen = !!openRegions[regionGroup.region];
+                  return (
+                    <React.Fragment key={regionGroup.region}>
+                      {/* REGION ROW */}
+                      <tr
+                        className="region-row"
+                        onClick={() => toggleRegion(regionGroup.region)}
+                      >
+                        <td>{isOpen ? '▼' : '▶'} {regionGroup.region}</td>
+                        <td>{formatCurrency(regionGroup.totals.spend)}</td>
+                        <td>{formatNumber(regionGroup.totals.impressions)}</td>
+                        <td>{formatNumber(regionGroup.totals.clicks)}</td>
+                        <td>{formatNumber(regionGroup.totals.conversions)}</td>
+                        <td>{regionGroup.totals.ctr.toFixed(2)}%</td>
+                      </tr>
+
+                      {/* CHANNEL ROWS */}
+                      {isOpen &&
+                        regionGroup.items.map((item) => (
+                          <tr
+                            key={item.id}
+                            className="channel-row"
+                          >
+                            <td className="child-cell">{item.channel}</td>
+                            <td>{formatCurrency(item.spend)}</td>
+                            <td>{formatNumber(item.impressions)}</td>
+                            <td>{formatNumber(item.clicks)}</td>
+                            <td>{formatNumber(item.conversions)}</td>
+                            <td>{((item.clicks / item.impressions) * 100 || 0).toFixed(2)}%</td>
+                          </tr>
+                        ))}
+                    </React.Fragment>
+                  );
+                })}
+            </tbody>
+          </table>
+      </div>
       <div
         style={{
           marginTop: '0.5rem',

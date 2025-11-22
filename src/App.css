@@ -1,6 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
+  width:100%;
   padding: 2rem;
   text-align: center;
 }
@@ -65,4 +66,78 @@
 
 .custom-select:hover {
   border-color: #999;
+}
+
+.filters-row-select{
+  min-width:100px;
+}
+.table-wrapper {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.perf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+/* Head */
+.perf-table thead tr {
+  background-color: #e6e6e6;
+}
+
+.perf-table th {
+  text-align: right;
+  padding: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.perf-table th:first-child {
+  text-align: left;
+}
+
+/* Region row */
+.region-row {
+  background-color: #f7f7f7;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Region cells */
+.region-row td {
+  padding: 0.5rem;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+.region-row td:first-child {
+  text-align: left;
+}
+
+/* Channel rows */
+.channel-row td {
+  padding: 0.5rem;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+.channel-row td.child-cell {
+  padding-left: 2rem;
+  text-align: left;
+}
+
+/* Alternate */
+.channel-row:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+.channel-row:nth-child(even) {
+  background-color: #e8e8e8;
+}
+
+/* Hover */
+.channel-row:hover,
+.region-row:hover {
+  background-color: #dcdcdc !important;
 }

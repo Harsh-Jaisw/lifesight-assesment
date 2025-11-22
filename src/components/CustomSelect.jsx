@@ -7,7 +7,8 @@ function CustomSelect({
   handleChange,
   value = '',
   placeholder = 'Select...',
-  className = '',
+  wrapperClassName = '',
+  selectClass='',
   name,
   id,
 }) {
@@ -18,9 +19,9 @@ function CustomSelect({
   };
 
   return (
-    <div className={`custom-select-wrapper ${className}`}>
+    <div className={`custom-select-wrapper ${wrapperClassName}`}>
       <select
-        className="custom-select"
+        className={`custom-select ${selectClass}`}
         onChange={onChange}
         value={value}
         name={name}
