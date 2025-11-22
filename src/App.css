@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+.custom-select-wrapper {
+  display: inline-block;
+  min-width: 160px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.custom-select:focus {
+  border-color: #2563eb; /* blue-ish */
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.custom-select:hover {
+  border-color: #999;
+}

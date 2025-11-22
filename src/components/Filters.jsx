@@ -9,51 +9,52 @@ import {
   setRegionFilter,
   setChannelFilter,
 } from '../features/performance/performanceSlice';
-
+import CustomSelect from './CustomSelect';
 const Filters = React.memo(function Filters() {
   const dispatch = useDispatch();
   const regions = useSelector(selectRegions);
   const channels = useSelector(selectChannels);
   const filters = useSelector(selectFilters);
+   const regionOptions = regions.map((r) => ({ label: r, value: r }));
+  const channelOptions = channels.map((c) => ({ label: c, value: c }));
 
-  const handleRegionChange = useCallback(
-    e => {
-      dispatch(setRegionFilter(e.target.value));
-    },
-    [dispatch]
-  );
+const handleRegionChange = useCallback(
+  (value) => {
+    dispatch(setRegionFilter(value));
+  },
+  [dispatch]
+);
 
-  const handleChannelChange = useCallback(
-    e => {
-      dispatch(setChannelFilter(e.target.value));
-    },
-    [dispatch]
-  );
+const handleChannelChange = useCallback(
+  (value) => {
+    dispatch(setChannelFilter(value));
+  },
+  [dispatch]
+);
+
 
   return (
     <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
       <div>
         <label>
           Region:&nbsp;
-          <select value={filters.region} onChange={handleRegionChange}>
-            {regions.map(region => (
-              <option key={region} value={region}>
-                {region}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+          options={regionOptions}
+          value={filters.region}
+          handleChange={handleRegionChange}
+          className="filters-select"
+        />
         </label>
       </div>
       <div>
         <label>
           Channel:&nbsp;
-          <select value={filters.channel} onChange={handleChannelChange}>
-            {channels.map(channel => (
-              <option key={channel} value={channel}>
-                {channel}
-              </option>
-            ))}
-          </select>
+           <CustomSelect
+          options={channelOptions}
+          value={filters.channel}
+          handleChange={handleChannelChange}
+          className="filters-select"
+        />
         </label>
       </div>
     </div>
