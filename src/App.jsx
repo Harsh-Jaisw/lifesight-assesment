@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPerformanceData } from './features/performance/performanceSlice';
 import Filters from './components/Filters';
@@ -19,7 +19,7 @@ function App() {
   }, [status, dispatch]);
 
   return (
-    <div style={{ padding: '1.5rem', maxWidth: 1200, margin: '0 auto' }}>
+    <div >
       <h1>Marketing Performance Dashboard</h1>
       {status === 'loading' && <p>Loading data…</p>}
       {status === 'failed' && <p style={{ color: 'red' }}>{error}</p>}
@@ -27,9 +27,9 @@ function App() {
       {status === 'succeeded' && (
         <>
           <Filters />
-          <TotalsBar />
+          {/* <TotalsBar />
           <PerformanceTable />
-          <PerformanceChart />
+          <PerformanceChart /> */}
         </>
       )}
     </div>
