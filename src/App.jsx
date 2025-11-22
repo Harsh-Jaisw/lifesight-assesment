@@ -27,9 +27,9 @@ function App() {
       {status === 'succeeded' && (
         <>
           <Filters />
-          {/* <TotalsBar /> */}
-          {/* <PerformanceTable /> */}
-          {/* <PerformanceChart /> */}
+          <TotalsBar />
+          <PerformanceTable />
+          <PerformanceChart />
         </>
       )}
     </div>
