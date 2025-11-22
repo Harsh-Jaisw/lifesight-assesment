@@ -41,7 +41,7 @@ const PerformanceChart = React.memo(function PerformanceChart() {
  
   return (
     <div
-      style={{
+      style={{ 
         height: 300,
         marginTop: '1rem',
         padding: '1rem',
